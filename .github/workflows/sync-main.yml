@@ -1,0 +1,24 @@
+name: Sync Fork
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # 每小时运行一次
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout B repository
+      uses: actions/checkout@v2
+      with:
+        repository: Qha821/RTD-Hosting
+        token: ${{ secrets.BOT }}
+        fetch-depth: 0
+
+    - name: Add A repository as remote
+      run: |
+        git remote add upstream https://github.com/RealmTech-Studio/RTD-Hosting.git
+        git fetch upstream
+        git merge upstream/main
+        git push origin main
